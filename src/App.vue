@@ -10,7 +10,7 @@ gsap.registerPlugin(ScrollTrigger, SplitText);
 </script>
 
 <template>
-    <main>
+    <main class=" h-[200vh]">
         <NavBar />
         <Hero />
     </main>

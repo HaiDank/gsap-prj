@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import gsap from "gsap";
+import { onMounted, onUnmounted } from "vue";
 
 import { navLinks } from "../constants";
 
+let navTween: gsap.core.Timeline | undefined;
+
 onMounted(() => {
-    const navTween = gsap.timeline({
+    navTween = gsap.timeline({
         scrollTrigger: {
             trigger: "nav",
             start: "bottom top",
@@ -15,10 +18,16 @@ onMounted(() => {
         backgroundColor: "transparent",
     }, {
         backgroundColor: "#00000050",
-        backgroundFilter: "blur(10px)",
+        backdropFilter: "blur(10px)",
         duration: 1,
         ease: "power1.inOut",
     });
+});
+
+onUnmounted(() => {
+    if (navTween) {
+        navTween.revert();
+    }
 });
 </script>
 
