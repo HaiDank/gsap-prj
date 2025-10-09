@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import gsap from "gsap";
 import { SplitText } from "gsap/all";
-import { onMounted, onUnmounted } from "vue";
 
-let ctx: gsap.Context | null = null;
+import { useGSAPContext } from "../composables/use-gsap-context";
 
-onMounted(() => {
-    ctx = gsap.context(() => {
+useGSAPContext(() => {
+    document.fonts.ready.then(() => {
         const titleSplit = SplitText.create("#about h2", {
             type: "words",
         });
@@ -31,12 +30,6 @@ onMounted(() => {
             stagger: 0.04,
         }, "-=0.5");
     });
-});
-
-onUnmounted(() => {
-    if (ctx) {
-        ctx.revert();
-    }
 });
 </script>
 

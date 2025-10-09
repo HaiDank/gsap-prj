@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import gsap from "gsap";
-import { onMounted, onUnmounted } from "vue";
 
+import { useGSAPContext } from "../composables/use-gsap-context";
 import { navLinks } from "../constants";
 
-let navTween: gsap.core.Timeline | undefined;
-
-onMounted(() => {
-    navTween = gsap.timeline({
+useGSAPContext(() => {
+    const navTween = gsap.timeline({
         scrollTrigger: {
             trigger: "nav",
             start: "bottom top",
@@ -22,12 +20,6 @@ onMounted(() => {
         duration: 1,
         ease: "power1.inOut",
     });
-});
-
-onUnmounted(() => {
-    if (navTween) {
-        navTween.revert();
-    }
 });
 </script>
 

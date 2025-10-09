@@ -1,35 +1,26 @@
 <script setup lang="ts">
 import gsap from "gsap";
-import { onMounted, onUnmounted } from "vue";
 
+import { useGSAPContext } from "../composables/use-gsap-context";
 import { cocktailLists, mockTailLists } from "../constants";
 
-let ctx: gsap.Context | null = null;
-onMounted(() => {
-    ctx = gsap.context(() => {
-        const parallaxTl = gsap.timeline({
-            scrollTrigger: {
-                trigger: "#cocktails",
-                start: "top 30%",
-                end: "bottom 80%",
-                scrub: true,
-            },
-        });
-
-        parallaxTl.from("#c-left-leaf", {
-            x: -100,
-            y: 100,
-        }).from("#c-right-leaf", {
-            x: 100,
-            y: 100,
-        });
+useGSAPContext(() => {
+    const parallaxTl = gsap.timeline({
+        scrollTrigger: {
+            trigger: "#cocktails",
+            start: "top 30%",
+            end: "bottom 80%",
+            scrub: true,
+        },
     });
-});
 
-onUnmounted(() => {
-    if (ctx) {
-        ctx.revert();
-    }
+    parallaxTl.from("#c-left-leaf", {
+        x: -100,
+        y: 100,
+    }).from("#c-right-leaf", {
+        x: 100,
+        y: 100,
+    });
 });
 </script>
 

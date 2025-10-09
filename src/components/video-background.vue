@@ -1,40 +1,31 @@
 <script setup lang="ts">
 import gsap from "gsap";
-import { onMounted, onUnmounted, ref } from "vue";
+import { ref } from "vue";
 
+import { useGSAPContext } from "../composables/use-gsap-context";
 import { useIsMobile } from "../composables/use-is-mobile";
 
 const videoRef = ref<HTMLVideoElement | null>(null);
 const isMobile = useIsMobile();
 
-let ctx: gsap.Context | null = null;
+useGSAPContext(() => {
+    const startValue = isMobile ? "top 50%" : "center 60%";
+    const endValue = isMobile ? "120% top" : "bottom top";
 
-onMounted(() => {
-    ctx = gsap.context(() => {
-        const startValue = isMobile ? "top 50%" : "center 60%";
-        const endValue = isMobile ? "120% top" : "bottom top";
-
-        const videoTimeline = gsap.timeline({
-            scrollTrigger: {
-                trigger: "video",
-                start: startValue,
-                end: endValue,
-                scrub: true,
-                pin: true,
-            },
-        });
-        videoRef.value!.onloadedmetadata = () => {
-            videoTimeline.to(videoRef.value, {
-                currentTime: videoRef.value!.duration,
-            });
-        };
+    const videoTimeline = gsap.timeline({
+        scrollTrigger: {
+            trigger: "video",
+            start: startValue,
+            end: endValue,
+            scrub: true,
+            pin: true,
+        },
     });
-});
-
-onUnmounted(() => {
-    if (ctx) {
-        ctx.revert();
-    }
+    videoRef.value!.onloadedmetadata = () => {
+        videoTimeline.to(videoRef.value, {
+            currentTime: videoRef.value!.duration,
+        });
+    };
 });
 </script>
 
