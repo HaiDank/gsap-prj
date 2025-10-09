@@ -1,49 +1,92 @@
 <script setup lang="ts">
 import gsap from "gsap";
 import { SplitText } from "gsap/all";
-import { onMounted } from "vue";
+import { onMounted, onUnmounted, ref, watchEffect } from "vue";
+
+import { useIsMobile } from "../composables/use-is-mobile";
+
+const videoRef = ref<HTMLVideoElement | null>(null);
+const isMobile = useIsMobile();
+
+let ctx: gsap.Context | null = null;
 
 onMounted(() => {
-    document.fonts.ready.then(() => {
-        const heroSplit = new SplitText(".title", { type: "chars, words" });
+    ctx = gsap.context(() => {
+        document.fonts.ready.then(() => {
+            const heroSplit = new SplitText(".title", { type: "chars, words" });
 
-        const paragraphSplit = new SplitText(".subtitle", { type: "lines" });
+            const paragraphSplit = new SplitText(".subtitle", { type: "lines" });
 
-        heroSplit.chars.forEach(char => char.classList.add("text-gradient"));
+            heroSplit.chars.forEach(char => char.classList.add("text-gradient"));
 
-        gsap.from(heroSplit.chars, {
-            yPercent: 100,
-            duration: 1.8,
-            ease: "expo.out",
-            stagger: 0.06,
+            gsap.from(heroSplit.chars, {
+                yPercent: 100,
+                duration: 1.8,
+                ease: "expo.out",
+                stagger: 0.06,
+            });
+
+            gsap.from(paragraphSplit.lines, {
+                opacity: 0,
+                yPercent: 100,
+                duration: 1.8,
+                ease: "expo.out",
+                stagger: 0.06,
+                delay: 0.9,
+            });
         });
 
-        gsap.from(paragraphSplit.lines, {
-            opacity: 0,
-            yPercent: 100,
-            duration: 1.8,
-            ease: "expo.out",
-            stagger: 0.06,
-            delay: 1,
+        gsap.timeline({
+            scrollTrigger: {
+                trigger: "#hero",
+                start: "top top",
+                end: "bottom top",
+                scrub: true,
+            },
+        }).to(".right-leaf", {
+            y: 200,
+        }, 0).to(".left-leaf", {
+            y: -200,
+        }, 0);
+
+        const startValue = isMobile ? "top 50%" : "center 60%";
+        const endValue = isMobile ? "120% top" : "bottom top";
+
+        const videoTimeline = gsap.timeline({
+            scrollTrigger: {
+                trigger: "video",
+                start: startValue,
+                end: endValue,
+                scrub: true,
+                pin: true,
+            },
         });
+        videoRef.value!.onloadedmetadata = () => {
+            videoTimeline.to(videoRef.value, {
+                currentTime: videoRef.value!.duration,
+            });
+        };
     });
+});
 
-    gsap.timeline({
-        scrollTrigger: {
-            trigger: "#hero",
-            start: "top top",
-            end: "bottom top",
-            scrub: true,
-        },
-    }).to(".right-leaf", {
-        y: 200,
-    }, 0).to(".left-leaf", {
-        y: -200,
-    }, 0); ;
+onUnmounted(() => {
+    if (ctx) {
+        ctx.revert();
+    }
 });
 </script>
 
 <template>
+    <div class="video">
+        <video
+            ref="videoRef"
+            muted
+            src="/videos/output.mp4"
+            :playsinline="true"
+            preload="auto"
+        />
+    </div>
+
     <section id="hero" className="noisy">
         <h1 className="title">
             MOJITO
@@ -61,12 +104,6 @@ onMounted(() => {
         >
 
         <div className="body">
-            {/* <img
-                src="/images/arrow.png"
-                alt="arrow"
-                className="arrow"
-            > */}
-
             <div className="content">
                 <div className="space-y-5 hidden md:block">
                     <p>Cool. Crisp. Classic.</p>
