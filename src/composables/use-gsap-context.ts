@@ -1,13 +1,23 @@
 import gsap from "gsap";
-import { onMounted, onUnmounted } from "vue";
+import { onMounted, onUnmounted, watch } from "vue";
 
-export function useGSAPContext(cb = () => {}) {
+export function useGSAPContext(cb = () => {}, dependencies: any[] = []) {
     let ctx: gsap.Context | null = null;
 
     onMounted(() => {
-        ctx = gsap.context(() => {
-            cb();
-        });
+        if (dependencies.length === 0) {
+            ctx = gsap.context(() => {
+                cb();
+            });
+        }
+    });
+
+    watch(dependencies, () => {
+        if (dependencies.length > 0) {
+            ctx = gsap.context(() => {
+                cb();
+            });
+        }
     });
 
     onUnmounted(() => {

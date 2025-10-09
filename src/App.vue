@@ -7,6 +7,7 @@ import About from "./components/about.vue";
 import Art from "./components/art.vue";
 import Cocktails from "./components/cocktails.vue";
 import Hero from "./components/hero.vue";
+import Menu from "./components/menu.vue";
 import NavBar from "./components/nav-bar.vue";
 import VideoBackground from "./components/video-background.vue";
 
@@ -21,5 +22,6 @@ gsap.registerPlugin(ScrollTrigger, SplitText);
         <Cocktails />
         <About />
         <Art />
+        <Menu />
     </main>
 </template>
