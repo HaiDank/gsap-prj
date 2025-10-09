@@ -20,7 +20,7 @@ const navLinks: NavItem[] = [
         title: "About Us",
     },
     {
-        id: "work",
+        id: "art",
         title: "The Art",
     },
     {

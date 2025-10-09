@@ -32,7 +32,7 @@ useGSAPContext(() => {
             </a>
             <ul>
                 <li v-for="item in navLinks" :key="item.id">
-                    <a :href="item.id">
+                    <a :href="`#${item.id}`">
                         {{ item.title }}
                     </a>
                 </li>
