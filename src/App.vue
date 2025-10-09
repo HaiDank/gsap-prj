@@ -6,12 +6,14 @@ import { ScrollTrigger, SplitText } from "gsap/all";
 import Cocktails from "./components/cocktails.vue";
 import Hero from "./components/hero.vue";
 import NavBar from "./components/nav-bar.vue";
+import VideoBackground from "./components/video-background.vue";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 </script>
 
 <template>
     <main>
+        <VideoBackground />
         <NavBar />
         <Hero />
         <Cocktails />

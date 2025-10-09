@@ -1,5 +1,36 @@
 <script setup lang="ts">
-import { cocktailLists } from "../constants";
+import gsap from "gsap";
+import { onMounted, onUnmounted } from "vue";
+
+import { cocktailLists, mockTailLists } from "../constants";
+
+let ctx: gsap.Context | null = null;
+onMounted(() => {
+    ctx = gsap.context(() => {
+        const parallaxTl = gsap.timeline({
+            scrollTrigger: {
+                trigger: "#cocktails",
+                start: "top 30%",
+                end: "bottom 80%",
+                scrub: true,
+            },
+        });
+
+        parallaxTl.from("#c-left-leaf", {
+            x: -100,
+            y: 100,
+        }).from("#c-right-leaf", {
+            x: 100,
+            y: 100,
+        });
+    });
+});
+
+onUnmounted(() => {
+    if (ctx) {
+        ctx.revert();
+    }
+});
 </script>
 
 <template>
@@ -29,6 +60,19 @@ import { cocktailLists } from "../constants";
                             </p>
                             <span>- {{ item.price }}</span>
                         </div>
+                    </li>
+                </ul>
+            </div>
+            <div className="loved">
+                <h2>Most loved mocktails:</h2>
+
+                <ul>
+                    <li v-for="item in mockTailLists" :key="item.name">
+                        <div class="me-28">
+                            <h3>{{ item.name }}</h3>
+                            <p>{{ item.country }} | {{ item.detail }}</p>
+                        </div>
+                        <span>- {{ item.price }}</span>
                     </li>
                 </ul>
             </div>

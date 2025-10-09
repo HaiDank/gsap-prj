@@ -1,12 +1,7 @@
 <script setup lang="ts">
 import gsap from "gsap";
 import { SplitText } from "gsap/all";
-import { onMounted, onUnmounted, ref, watchEffect } from "vue";
-
-import { useIsMobile } from "../composables/use-is-mobile";
-
-const videoRef = ref<HTMLVideoElement | null>(null);
-const isMobile = useIsMobile();
+import { onMounted, onUnmounted } from "vue";
 
 let ctx: gsap.Context | null = null;
 
@@ -48,24 +43,6 @@ onMounted(() => {
         }, 0).to(".left-leaf", {
             y: -200,
         }, 0);
-
-        const startValue = isMobile ? "top 50%" : "center 60%";
-        const endValue = isMobile ? "120% top" : "bottom top";
-
-        const videoTimeline = gsap.timeline({
-            scrollTrigger: {
-                trigger: "video",
-                start: startValue,
-                end: endValue,
-                scrub: true,
-                pin: true,
-            },
-        });
-        videoRef.value!.onloadedmetadata = () => {
-            videoTimeline.to(videoRef.value, {
-                currentTime: videoRef.value!.duration,
-            });
-        };
     });
 });
 
@@ -77,16 +54,6 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div class="video">
-        <video
-            ref="videoRef"
-            muted
-            src="/videos/output.mp4"
-            :playsinline="true"
-            preload="auto"
-        />
-    </div>
-
     <section id="hero" className="noisy">
         <h1 className="title">
             MOJITO
