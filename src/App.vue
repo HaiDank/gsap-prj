@@ -3,6 +3,7 @@
 import gsap from "gsap";
 import { ScrollTrigger, SplitText } from "gsap/all";
 
+import About from "./components/about.vue";
 import Cocktails from "./components/cocktails.vue";
 import Hero from "./components/hero.vue";
 import NavBar from "./components/nav-bar.vue";
@@ -17,5 +18,6 @@ gsap.registerPlugin(ScrollTrigger, SplitText);
         <NavBar />
         <Hero />
         <Cocktails />
+        <About />
     </main>
 </template>
